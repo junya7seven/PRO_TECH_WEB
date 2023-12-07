@@ -41,7 +41,7 @@ namespace asdasdsad
             StringBuilder result = new StringBuilder();
             foreach (var pair in characterCount)
             {
-                result.AppendLine($"Символ '{pair.Key}' встречается {pair.Value} раз");
+                result.AppendLine($"{pair.Key} {pair.Value}");
             }
 
             return result.ToString();

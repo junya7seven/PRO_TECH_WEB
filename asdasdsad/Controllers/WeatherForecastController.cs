@@ -35,7 +35,7 @@ namespace YourNamespace.Controllers
             // отсортированная строка простой сортировкой
             string quickSort = QuickSort.QuickSortPrint(inputString.ToCharArray());
             // получение рандомного числа + новая возврат записи в тело JSON. Для удобства создана новая запись обработанной строки + самого рандомного числа
-            var wresult = GetRandomNumbers.Random(inputString);
+            var randomNumb = GetRandomNumbers.Random(inputString);
 
             // Запись возврата тело JSON 
             var result = new
@@ -46,7 +46,7 @@ namespace YourNamespace.Controllers
                 substring,
                 treeSortPrint,
                 quickSort,
-                wresult
+                randomNumb
             };
             return Ok(result);
         }
