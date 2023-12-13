@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
 
-namespace asdasdsad
+namespace Tasks
 {
     public class OperationsString
     {
