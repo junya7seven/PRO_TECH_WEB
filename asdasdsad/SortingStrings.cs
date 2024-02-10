@@ -2,10 +2,6 @@
 
 namespace asdasdsad
 {
-    public class SortingStrings
-    {
-
-    }
     public class QuickSort
     {
         public static string QuickSortPrint(char[] arr)
@@ -21,27 +17,27 @@ namespace asdasdsad
             {
                 int pivotIndex = Partition(arr, left, right); // Опорный элемент
 
-                QuickSorts(arr, left, pivotIndex - 1); // Рекурсивная сортировка левой части
-                QuickSorts(arr, pivotIndex + 1, right); // Рекурсивная сортировка правой части
+                QuickSorts(arr, left, pivotIndex - 1); 
+                QuickSorts(arr, pivotIndex + 1, right); 
             }
         }
 
         static int Partition(char[] arr, int left, int right)
         {
-            char pivotValue = arr[right]; // Выбор опорного элемента (последний элемент в текущем подмассиве)
+            char pivotValue = arr[right]; 
             int pivotIndex = left;
 
             for (int i = left; i < right; i++)
             {
-                if (arr[i] < pivotValue) // Если элемент меньше опорного, перемещаем его влево
+                if (arr[i] < pivotValue) 
                 {
                     Swap(arr, i, pivotIndex);
                     pivotIndex++;
                 }
             }
 
-            Swap(arr, pivotIndex, right); // Помещаем опорный элемент на его правильное место
-            return pivotIndex; // Возвращаем индекс опорного элемента
+            Swap(arr, pivotIndex, right); 
+            return pivotIndex; 
         }
 
         static void Swap(char[] arr, int i, int j)
@@ -54,9 +50,9 @@ namespace asdasdsad
     /////////// Сортировка деревом
     class Node
     {
-        public char Value; // Данные узла (символ)
-        public Node Left; // Левый дочерний узел
-        public Node Right; // Правый дочерний узел
+        public char Value; 
+        public Node Left; 
+        public Node Right; 
 
         public Node(char value)
         {
@@ -65,36 +61,34 @@ namespace asdasdsad
             Right = null;
         }
     }
-    // Класс для бинарного дерева поиска
     class BinaryTree
     {
-        private Node root; // Корневой узел дерева
+        private Node root; 
 
         public BinaryTree()
         {
             root = null;
         }
-        // Метод для вставки символа в дерево
         public void Insert(char value)
         {
             root = InsertRec(root, value);
         }
-        // Рекурсивный метод для вставки символа в дерево
+
         private Node InsertRec(Node root, char value)
         {
             if (root == null)
             {
-                root = new Node(value); // Создаем новый узел, если текущий узел пуст
+                root = new Node(value); 
                 return root;
             }
 
             if (value < root.Value)
             {
-                root.Left = InsertRec(root.Left, value); // Рекурсивная вставка в левое поддерево
+                root.Left = InsertRec(root.Left, value); 
             }
             else if (value > root.Value)
             {
-                root.Right = InsertRec(root.Right, value); // Рекурсивная вставка в правое поддерево
+                root.Right = InsertRec(root.Right, value); 
             }
 
             return root;
@@ -105,24 +99,24 @@ namespace asdasdsad
             InOrderTraversal(root, sortedString);
             return sortedString.ToString();
         }
-        // Метод для обхода дерева в порядке возрастания
+
         private void InOrderTraversal(Node root, StringBuilder sortedString)
         {
             if (root != null)
             {
                 InOrderTraversal(root.Left, sortedString);
-                sortedString.Append(root.Value); // Добавляем значение к строке
+                sortedString.Append(root.Value); 
                 InOrderTraversal(root.Right, sortedString);
             }
         }
-        // Рекурсивный метод для обхода дерева в порядке возрастания
+
         private void InOrderTraversal(Node root)
         {
             if (root != null)
             {
-                InOrderTraversal(root.Left); // Рекурсивный обход левого поддерева
-                Console.Write(root.Value); // Выводим данные узла
-                InOrderTraversal(root.Right); // Рекурсивный обход правого поддерева
+                InOrderTraversal(root.Left); 
+                Console.Write(root.Value); 
+                InOrderTraversal(root.Right); 
             }
         }
         public string TreeSortPrint(string inputString)

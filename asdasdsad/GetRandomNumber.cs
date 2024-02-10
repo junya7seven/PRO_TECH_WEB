@@ -24,14 +24,14 @@ namespace Tasks
 
             try
             {
-                randomNumber = await GetRandomNumberFromAPI(apiUrl, inputString); // Проверка на получение рандомного числа
+                randomNumber = await GetRandomNumberFromAPI(apiUrl, inputString); 
             }
             catch (Exception)
             {
-                randomNumber = GenerateRandomNumber(inputString); // Если не удалось получить запрос
+                randomNumber = GenerateRandomNumber(inputString); 
             }
 
-            string modifiedString = RemoveChar(inputString, randomNumber); // Удаляем символ в строке
+            string modifiedString = RemoveChar(inputString, randomNumber); 
 
             var response = new
             {
@@ -39,18 +39,18 @@ namespace Tasks
                 modifiedString
             };
 
-            return Newtonsoft.Json.JsonConvert.SerializeObject(response); // Возвращаем значение в формате JSON 
+            return Newtonsoft.Json.JsonConvert.SerializeObject(response); 
         }
 
-        private async Task<int> GetRandomNumberFromAPI(string apiUrl,string inputString) // Запрос рандомного числа
+        private async Task<int> GetRandomNumberFromAPI(string apiUrl,string inputString) 
         {
-            HttpResponseMessage response = await _httpClient.GetAsync($"{apiUrl}?min=0&max={inputString.Length-1}&count=1"); // URL из конфигуратора + параметры рандомного числа
+            HttpResponseMessage response = await _httpClient.GetAsync($"{apiUrl}?min=0&max={inputString.Length-1}&count=1"); 
 
             if (response.IsSuccessStatusCode)
             {
                 string result = await response.Content.ReadAsStringAsync();
                 var randomApiResponse = Newtonsoft.Json.JsonConvert.DeserializeObject<int[]>(result);
-                return randomApiResponse[0]; // т.к. рандомное число выдаётся в массиве, возвращаем первый его элемент
+                return randomApiResponse[0]; 
             }
             else
             {

@@ -13,61 +13,72 @@ namespace Tasks.Controllers
     [ApiController]
     public class StringController : ControllerBase
     {
-        private readonly IConfiguration _configuration; 
+        private readonly IConfiguration _configuration;
+        private readonly SemaphoreSlim _semaphore;
 
         public StringController(IConfiguration configuration)
         {
             _configuration = configuration;
+            var parallelLimit = _configuration.GetValue<int>("iisSettings:ParallelLimit");
+            _semaphore = new SemaphoreSlim(parallelLimit, parallelLimit);
         }
 
         [HttpGet("process")]
         public async Task<IActionResult> ProcessString([FromQuery] string inputString)
         {
-            string[] blacklist = _configuration.GetSection("iisSettings:BlackList").Get<string[]>(); // Перенос черного списка из конфигуратора в массив
-
-            if (string.IsNullOrEmpty(inputString) || string.IsNullOrWhiteSpace(inputString)) // Проверка на пустую строку и наличие пробелов || string.IsNullOrWhiteSpace(inputString)
+            if (!_semaphore.Wait(0))
             {
-                return BadRequest("HTTP ошибка 400 Bad Request. Invalid input string.");
+                // Если лимит параллельных запросов превышен, возвращаем ошибку 503
+                return StatusCode(503, "Service Unavailable. The server is currently busy.");
             }
-            if (!Regex.IsMatch(inputString, "^[a-z]+$")) // Проверка на наличие не английских символов
+            try
             {
-                return BadRequest("HTTP ошибка 400 Bad Request. Invalid input string.");
+                string[] blacklist = _configuration.GetSection("iisSettings:BlackList").Get<string[]>(); // Перенос черного списка из конфигуратора в массив
+
+                if (string.IsNullOrWhiteSpace(inputString)) // Проверка на пустую строку и наличие пробелов
+                {
+                    return BadRequest("HTTP ошибка 400 Bad Request. Invalid input string.");
+                }
+                if (!Regex.IsMatch(inputString, "^[a-z]+$")) // Проверка на наличие не английских символов
+                {
+                    return BadRequest("HTTP ошибка 400 Bad Request. Invalid input string.");
+                }
+                if (blacklist.Contains(inputString)) // Проверка на наличие слов в черном списке
+                {
+                    return BadRequest("HTTP ошибка 400 Bad Request. Слово находится в чёрном списке.");
+                }
+
+                OperationsString oper = new OperationsString();
+                string modString = await oper.StringSplit(inputString);
+                string repeatSymbols = await oper.CountPrint(modString.ToString());
+                string substring = await oper.FindSubstring(modString);
+                BinaryTree binaryTree = new BinaryTree();
+                string treeSortPrint = binaryTree.TreeSortPrint(inputString);
+                string quickSort = QuickSort.QuickSortPrint(inputString.ToCharArray());
+
+                RandomNumberService randomNumberService = new RandomNumberService(_configuration);
+                var modifiedString = await randomNumberService.GetModifiedStringAsync(inputString);
+
+                // Запись возврата тело JSON 
+                var result = new
+                {
+                    inputString,
+                    modString,
+                    repeatSymbols,
+                    substring,
+                    treeSortPrint,
+                    quickSort,
+                    modifiedString
+                };
+
+                return Ok(result);
             }
-            if (blacklist.Contains(inputString)) // Проверка на наличие слов в черном списке
+            finally
             {
-                return BadRequest("HTTP ошибка 400 Bad Request. Слово находится в чёрном списке.");
+                // Возвращаем разрешение после обработки запроса
+                _semaphore.Release();
             }
 
-            
-
-            // Обработанная строка
-            string modString = OperationsString.StringSplit(inputString);
-            // повторяющиеся символы
-            string repeatSymbols = OperationsString.CountPrint(modString.ToCharArray());
-            // самая длинная подстрока начинающаяся и заканчивающаяся на гласные
-            string substring = OperationsString.FindSubstring(modString);
-            // отсортировання строка бинарным деревом
-            BinaryTree binaryTree = new BinaryTree();
-            string treeSortPrint = binaryTree.TreeSortPrint(inputString);
-            // отсортированная строка простой сортировкой
-            string quickSort = QuickSort.QuickSortPrint(inputString.ToCharArray());
-            
-            // Создание экземпляра класса с конфигуратором, в котором есть URL
-            RandomNumberService randomNumberService = new RandomNumberService(_configuration);
-            var modifiedString = await randomNumberService.GetModifiedStringAsync(inputString);
-            // Запись возврата тело JSON 
-            var result = new
-            {
-                inputString,
-                modString,
-                repeatSymbols,
-                substring,
-                treeSortPrint,
-                quickSort,
-                modifiedString
-
-            };
-            return Ok(result);
         }
     }
 }
