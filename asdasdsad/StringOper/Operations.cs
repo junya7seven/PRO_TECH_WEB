@@ -1,24 +1,24 @@
 ﻿using System.Text;
 using System.Text.RegularExpressions;
 
-namespace Tasks
+namespace asdasdsad.StringOper
 {
     public class OperationsString
     {
         public async Task<string> StringSplit(string inputString)
         {
-            int split = inputString.Length / 2; 
+            int split = inputString.Length / 2;
             string strResult = " ";
             if (inputString.Length % 2 == 0)
             {
-                string first = new string(inputString.Substring(0, split).Reverse().ToArray()); 
-                string second = new string(inputString.Substring(split).Reverse().ToArray()); 
-                strResult = string.Concat(first, second); 
+                string first = new string(inputString.Substring(0, split).Reverse().ToArray());
+                string second = new string(inputString.Substring(split).Reverse().ToArray());
+                strResult = string.Concat(first, second);
             }
             else
             {
-                strResult = new string(inputString.Reverse().ToArray()); 
-                strResult = string.Concat(strResult, inputString); 
+                strResult = new string(inputString.Reverse().ToArray());
+                strResult = string.Concat(strResult, inputString);
             }
             return strResult;
         }
@@ -53,10 +53,10 @@ namespace Tasks
 
         public async Task<string> FindSubstring(string inputString)
         {
-            int firstIndex = -1; 
-            int lastIndex = -1; 
-            string resultConcat = ""; 
-            for (int i = 0; i < inputString.Length; i++) 
+            int firstIndex = -1;
+            int lastIndex = -1;
+            string resultConcat = "";
+            for (int i = 0; i < inputString.Length; i++)
             {
                 char c = inputString[i];
                 if ("aeiouy".Contains(c) && firstIndex == -1)
@@ -70,7 +70,7 @@ namespace Tasks
             }
             if (firstIndex != -1)
             {
-                for (int j = firstIndex; j <= lastIndex; j++) 
+                for (int j = firstIndex; j <= lastIndex; j++)
                 {
                     resultConcat += inputString[j];
                 }

@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace asdasdsad
+namespace asdasdsad.StringOper.Sorting
 {
     public class QuickSort
     {
@@ -17,27 +17,27 @@ namespace asdasdsad
             {
                 int pivotIndex = Partition(arr, left, right); // Опорный элемент
 
-                QuickSorts(arr, left, pivotIndex - 1); 
-                QuickSorts(arr, pivotIndex + 1, right); 
+                QuickSorts(arr, left, pivotIndex - 1);
+                QuickSorts(arr, pivotIndex + 1, right);
             }
         }
 
         static int Partition(char[] arr, int left, int right)
         {
-            char pivotValue = arr[right]; 
+            char pivotValue = arr[right];
             int pivotIndex = left;
 
             for (int i = left; i < right; i++)
             {
-                if (arr[i] < pivotValue) 
+                if (arr[i] < pivotValue)
                 {
                     Swap(arr, i, pivotIndex);
                     pivotIndex++;
                 }
             }
 
-            Swap(arr, pivotIndex, right); 
-            return pivotIndex; 
+            Swap(arr, pivotIndex, right);
+            return pivotIndex;
         }
 
         static void Swap(char[] arr, int i, int j)
@@ -50,9 +50,9 @@ namespace asdasdsad
     /////////// Сортировка деревом
     class Node
     {
-        public char Value; 
-        public Node Left; 
-        public Node Right; 
+        public char Value;
+        public Node Left;
+        public Node Right;
 
         public Node(char value)
         {
@@ -63,7 +63,7 @@ namespace asdasdsad
     }
     class BinaryTree
     {
-        private Node root; 
+        private Node root;
 
         public BinaryTree()
         {
@@ -78,17 +78,17 @@ namespace asdasdsad
         {
             if (root == null)
             {
-                root = new Node(value); 
+                root = new Node(value);
                 return root;
             }
 
             if (value < root.Value)
             {
-                root.Left = InsertRec(root.Left, value); 
+                root.Left = InsertRec(root.Left, value);
             }
             else if (value > root.Value)
             {
-                root.Right = InsertRec(root.Right, value); 
+                root.Right = InsertRec(root.Right, value);
             }
 
             return root;
@@ -105,7 +105,7 @@ namespace asdasdsad
             if (root != null)
             {
                 InOrderTraversal(root.Left, sortedString);
-                sortedString.Append(root.Value); 
+                sortedString.Append(root.Value);
                 InOrderTraversal(root.Right, sortedString);
             }
         }
@@ -114,9 +114,9 @@ namespace asdasdsad
         {
             if (root != null)
             {
-                InOrderTraversal(root.Left); 
-                Console.Write(root.Value); 
-                InOrderTraversal(root.Right); 
+                InOrderTraversal(root.Left);
+                Console.Write(root.Value);
+                InOrderTraversal(root.Right);
             }
         }
         public string TreeSortPrint(string inputString)
